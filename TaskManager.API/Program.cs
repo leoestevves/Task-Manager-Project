@@ -41,4 +41,18 @@ app.MapPost("tasks", (CreateTaskDto newTask) =>
     return Results.CreatedAtRoute(GET_GAME_ENDPOINT_NAME, new {id = task.Id}, task);
 });
 
+//PUT /tasks/1
+app.MapPut("tasks/{id}", (int id, UpdateTaskDto updatedTask) =>
+{
+    var index = tasks.FindIndex(task => task.Id == id);
+
+    tasks[index] = new TaskDto(
+        id,
+        updatedTask.Title,
+        updatedTask.Description
+    );
+
+    return Results.NoContent();
+});
+
 app.Run();

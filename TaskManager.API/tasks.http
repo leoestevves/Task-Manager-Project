@@ -11,3 +11,12 @@ Content-Type: application/json
     "title": "Ir na academia",
     "description": "Ir para a academia a partir de semana que vem"
 }
+
+###
+PUT http://localhost:5145/tasks/1
+Content-Type: application/json
+
+{
+    "title": "Limpar a casa no final de semana.",
+    "description": "Aproveitar o final de semana para limpar a casa inteira."
+  }
