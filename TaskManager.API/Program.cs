@@ -55,4 +55,12 @@ app.MapPut("tasks/{id}", (int id, UpdateTaskDto updatedTask) =>
     return Results.NoContent();
 });
 
+//DELETE /tasks/1
+app.MapDelete("tasks/{id}", (int id) => 
+{
+    tasks.RemoveAll(task => task.Id == id);
+
+    return Results.NoContent();
+});
+
 app.Run();
