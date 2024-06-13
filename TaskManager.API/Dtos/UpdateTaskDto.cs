@@ -1,6 +1,8 @@
-﻿namespace TaskManager.API.Dtos;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TaskManager.API.Dtos;
 
 public record class UpdateTaskDto(
-    string Title,
-    string Description
+    [Required][StringLength(50)] string Title,
+    [Required][StringLength(200)] string Description
 );
