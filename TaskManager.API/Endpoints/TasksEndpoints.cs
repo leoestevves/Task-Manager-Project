@@ -12,11 +12,11 @@ public static class TasksEndpoints
         1,
         "Limpar a casa.",
         "Aproveitar o final de semana para limpar a casa inteira."),
-    new (
+        new (
         2,
         "Ir ao mercado.",
         "Fazer compras pela manhã no mercado mais próximo."),
-    new (
+        new (
         3,
         "Finalizar projeto pessoal.",
         "Terminar o projeto de games nesse final de semana.")
