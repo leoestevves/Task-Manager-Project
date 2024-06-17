@@ -14,6 +14,16 @@ public static class TaskMapping
         };
     }
 
+    public static TaskEntity ToEntity(this UpdateTaskDto task, int id)
+    {
+        return new TaskEntity()
+        {
+            Id = id,
+            Title = task.Title,
+            Description = task.Description
+        };
+    }
+
     public static TaskDto ToDto(this TaskEntity task)
     {
         return new

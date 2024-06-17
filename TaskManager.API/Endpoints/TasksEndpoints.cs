@@ -1,4 +1,5 @@
-﻿using TaskManager.API.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using TaskManager.API.Data;
 using TaskManager.API.Dtos;
 using TaskManager.API.Entities;
 using TaskManager.API.Mapping;
@@ -9,38 +10,22 @@ public static class TasksEndpoints
 {
     const string GET_GAME_ENDPOINT_NAME = "GetGame";
 
-    private static readonly List<TaskDto> tasks =
-    [
-        new (
-        1,
-        "Limpar a casa.",
-        "Aproveitar o final de semana para limpar a casa inteira."),
-        new (
-        2,
-        "Ir ao mercado.",
-        "Fazer compras pela manhã no mercado mais próximo."),
-        new (
-        3,
-        "Finalizar projeto pessoal.",
-        "Terminar o projeto de games nesse final de semana."),
-        new (
-        4,
-        "Ir na academia",
-        "Ir para a academia a partir de semana que vem")
-    ];
-
     public static RouteGroupBuilder MapTasksEndpoints(this WebApplication app) //RouteGroupBuilder substituindo o WebApplication
     {
         var group = app.MapGroup("tasks") //Com isso nao precisa ficar escrevendo "tasks" como string em cada metodo do CRUD, substituindo "app" por "group".
                        .WithParameterValidation(); //Metodo importado do MinimalApis.Extension
 
         //(Read)  GET /tasks
-        group.MapGet("/", () => tasks);
+        group.MapGet("/", (TaskManagerContext dbContext) =>         
+            dbContext.Tasks
+                     .Select(task => task.ToDto())
+                     .AsNoTracking()); //Otimizacao
+        
 
         //(Read)  GET /tasks/1
-        group.MapGet("/{id}", (int id) =>
+        group.MapGet("/{id}", (int id, TaskManagerContext dbContext) =>
         {
-            TaskDto? task = tasks.Find(task => task.Id == id);
+            TaskEntity? task = dbContext.Tasks.Find(id);
 
             if (task == null)
             {
@@ -48,7 +33,7 @@ public static class TasksEndpoints
             }
             else
             {
-                return Results.Ok(task);
+                return Results.Ok(task.ToDto());
             }
         })
         .WithName(GET_GAME_ENDPOINT_NAME);
@@ -66,28 +51,28 @@ public static class TasksEndpoints
 
 
         //(Update)  PUT /tasks/1
-        group.MapPut("/{id}", (int id, UpdateTaskDto updatedTask) =>
+        group.MapPut("/{id}", (int id, UpdateTaskDto updatedTask, TaskManagerContext dbContext) =>
         {
-            var index = tasks.FindIndex(task => task.Id == id);
+            var existingTask = dbContext.Tasks.Find(id);
 
-            if (index == -1) //Se nao encontrar, retorna NotFound
+            if (existingTask is null) //Se nao encontrar, retorna NotFound
             {
                 return Results.NotFound();
             }
 
-            tasks[index] = new TaskDto(
-                id,
-                updatedTask.Title,
-                updatedTask.Description
-            );
+            dbContext.Entry(existingTask).CurrentValues.SetValues(updatedTask.ToEntity(id));
+
+            dbContext.SaveChanges();
 
             return Results.NoContent();
         });
 
         //(Delete)  DELETE /tasks/1
-        group.MapDelete("/{id}", (int id) =>
+        group.MapDelete("/{id}", (int id, TaskManagerContext dbContext) =>
         {
-            tasks.RemoveAll(task => task.Id == id);
+            dbContext.Tasks
+                     .Where(task => task.Id == id)
+                     .ExecuteDelete();
 
             return Results.NoContent();
         });

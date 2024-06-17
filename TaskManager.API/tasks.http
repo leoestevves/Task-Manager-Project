@@ -1,7 +1,7 @@
 GET http://localhost:5145/tasks
 
 ###
-GET http://localhost:5145/tasks/4
+GET http://localhost:5145/tasks/2
 
 ###
 POST http://localhost:5145/tasks
@@ -13,13 +13,13 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:5145/tasks/1
+PUT http://localhost:5145/tasks/2
 Content-Type: application/json
 
 {
-    "title": "Limpar a casa no final de semana.",
+    "title": "Limpar a casa",
     "description": "Aproveitar o final de semana para limpar a casa inteira."
 }
 
 ###
-DELETE http://localhost:5145/tasks/4
+DELETE http://localhost:5145/tasks/3
