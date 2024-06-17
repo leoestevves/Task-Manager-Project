@@ -1,4 +1,7 @@
-﻿using TaskManager.API.Dtos;
+﻿using TaskManager.API.Data;
+using TaskManager.API.Dtos;
+using TaskManager.API.Entities;
+using TaskManager.API.Mapping;
 
 namespace TaskManager.API.Endpoints;
 
@@ -19,11 +22,15 @@ public static class TasksEndpoints
         new (
         3,
         "Finalizar projeto pessoal.",
-        "Terminar o projeto de games nesse final de semana.")
+        "Terminar o projeto de games nesse final de semana."),
+        new (
+        4,
+        "Ir na academia",
+        "Ir para a academia a partir de semana que vem")
     ];
 
     public static RouteGroupBuilder MapTasksEndpoints(this WebApplication app) //RouteGroupBuilder substituindo o WebApplication
-    {       
+    {
         var group = app.MapGroup("tasks") //Com isso nao precisa ficar escrevendo "tasks" como string em cada metodo do CRUD, substituindo "app" por "group".
                        .WithParameterValidation(); //Metodo importado do MinimalApis.Extension
 
@@ -47,18 +54,15 @@ public static class TasksEndpoints
         .WithName(GET_GAME_ENDPOINT_NAME);
 
         //(Create)  POST /tasks
-        group.MapPost("/", (CreateTaskDto newTask) =>
+        group.MapPost("/", (CreateTaskDto newTask, TaskManagerContext dbContext) =>
         {
-            TaskDto task = new(
-                tasks.Count + 1,
-                newTask.Title,
-                newTask.Description
-            );
+            TaskEntity task = newTask.ToEntity();
 
-            tasks.Add(task);
+            dbContext.Tasks.Add(task);
+            dbContext.SaveChanges();
 
-            return Results.CreatedAtRoute(GET_GAME_ENDPOINT_NAME, new { id = task.Id }, task);
-        });        
+            return Results.CreatedAtRoute(GET_GAME_ENDPOINT_NAME, new { id = task.Id }, task.ToDto());
+        });
 
 
         //(Update)  PUT /tasks/1

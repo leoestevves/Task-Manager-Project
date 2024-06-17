@@ -8,8 +8,8 @@ POST http://localhost:5145/tasks
 Content-Type: application/json
 
 {
-    "title": "Ir na academia",
-    "description": "Ir para a academia a partir de semana que vem"
+    "title": "Limpar a casa.",
+    "description": "Aproveitar o final de semana para limpar a casa inteira."
 }
 
 ###
