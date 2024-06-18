@@ -9,6 +9,6 @@ builder.Services.AddSqlite<TaskManagerContext>(connString);
 var app = builder.Build();
 
 app.MapTasksEndpoints();
-app.MigrateDb();
+await app.MigrateDbAsync();
 
 app.Run();

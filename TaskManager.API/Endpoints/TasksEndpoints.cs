@@ -16,16 +16,17 @@ public static class TasksEndpoints
                        .WithParameterValidation(); //Metodo importado do MinimalApis.Extension
 
         //(Read)  GET /tasks
-        group.MapGet("/", (TaskManagerContext dbContext) =>         
-            dbContext.Tasks
+        group.MapGet("/", async (TaskManagerContext dbContext) =>         
+            await dbContext.Tasks
                      .Select(task => task.ToDto())
-                     .AsNoTracking()); //Otimizacao
+                     .AsNoTracking()
+                     .ToListAsync()); //Otimizacao
         
 
         //(Read)  GET /tasks/1
-        group.MapGet("/{id}", (int id, TaskManagerContext dbContext) =>
+        group.MapGet("/{id}", async (int id, TaskManagerContext dbContext) =>
         {
-            TaskEntity? task = dbContext.Tasks.Find(id);
+            TaskEntity? task = await dbContext.Tasks.FindAsync(id);
 
             if (task == null)
             {
@@ -39,21 +40,21 @@ public static class TasksEndpoints
         .WithName(GET_GAME_ENDPOINT_NAME);
 
         //(Create)  POST /tasks
-        group.MapPost("/", (CreateTaskDto newTask, TaskManagerContext dbContext) =>
+        group.MapPost("/", async (CreateTaskDto newTask, TaskManagerContext dbContext) =>
         {
             TaskEntity task = newTask.ToEntity();
 
             dbContext.Tasks.Add(task);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             return Results.CreatedAtRoute(GET_GAME_ENDPOINT_NAME, new { id = task.Id }, task.ToDto());
         });
 
 
         //(Update)  PUT /tasks/1
-        group.MapPut("/{id}", (int id, UpdateTaskDto updatedTask, TaskManagerContext dbContext) =>
+        group.MapPut("/{id}", async (int id, UpdateTaskDto updatedTask, TaskManagerContext dbContext) =>
         {
-            var existingTask = dbContext.Tasks.Find(id);
+            var existingTask = await dbContext.Tasks.FindAsync(id);
 
             if (existingTask is null) //Se nao encontrar, retorna NotFound
             {
@@ -62,17 +63,17 @@ public static class TasksEndpoints
 
             dbContext.Entry(existingTask).CurrentValues.SetValues(updatedTask.ToEntity(id));
 
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             return Results.NoContent();
         });
 
         //(Delete)  DELETE /tasks/1
-        group.MapDelete("/{id}", (int id, TaskManagerContext dbContext) =>
+        group.MapDelete("/{id}", async (int id, TaskManagerContext dbContext) =>
         {
-            dbContext.Tasks
+            await dbContext.Tasks
                      .Where(task => task.Id == id)
-                     .ExecuteDelete();
+                     .ExecuteDeleteAsync();
 
             return Results.NoContent();
         });
