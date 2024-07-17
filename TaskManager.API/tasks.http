@@ -8,16 +8,16 @@ POST http://localhost:5145/tasks
 Content-Type: application/json
 
 {
-    "title": "Limpar a casa.",
-    "description": "Aproveitar o final de semana para limpar a casa inteira."
+    "title": "Finalizar projeto pessoal.",
+    "description": "Terminar o projeto de games nesse final de semana."
 }
 
 ###
-PUT http://localhost:5145/tasks/2
+PUT http://localhost:5145/tasks/1
 Content-Type: application/json
 
 {
-    "title": "Limpar a casa",
+    "title": "Limpar a casa no final de semana",
     "description": "Aproveitar o final de semana para limpar a casa inteira."
 }
 

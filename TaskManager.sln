@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.API", "TaskManager.API\TaskManager.API.csproj", "{E38105FB-4390-4269-8133-8FED4FECC404}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Frontend", "TaskManager.Frontend\TaskManager.Frontend.csproj", "{2E1B0D2D-C090-47F9-9912-7BE4C89E70E6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{E38105FB-4390-4269-8133-8FED4FECC404}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E38105FB-4390-4269-8133-8FED4FECC404}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E38105FB-4390-4269-8133-8FED4FECC404}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E1B0D2D-C090-47F9-9912-7BE4C89E70E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E1B0D2D-C090-47F9-9912-7BE4C89E70E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E1B0D2D-C090-47F9-9912-7BE4C89E70E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E1B0D2D-C090-47F9-9912-7BE4C89E70E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
