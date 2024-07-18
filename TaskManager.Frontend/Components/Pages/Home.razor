@@ -1,7 +1,53 @@
 ﻿@page "/"
+@using Models
 
 <PageTitle>Task Manager</PageTitle>
 
-<h1>Hello, Blazor!</h1>
+<table>
+    <thead>
+        <th>Id</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th></th>
+    </thead>
+    <tbody>
+        @foreach (var task in tasks)
+        {
+            <tr>
+                <td>@task.Id</td>
+                <td>@task.Title</td>
+                <td>@task.Description</td>
+                <td>
+                    
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
-Welcome to your new app.
+
+
+@code
+{
+    private TaskSummary[] tasks = 
+    [
+        new ()
+        {
+            Id = 1,
+            Title = "Limpar a casa",
+            Description = "Aproveitar o final de semana para limpar a casa inteira."
+        },
+        new ()
+        {
+            Id = 2,
+            Title = "Ir ao mercado",
+            Description = "Fazer compras pela manhã no mercado mais próximo."
+        },
+        new ()
+        {
+            Id = 3,
+            Title = "Finalizar projeto pessoal.",
+            Description = "Terminar o projeto de games nesse final de semana."
+        }
+    ];
+}
