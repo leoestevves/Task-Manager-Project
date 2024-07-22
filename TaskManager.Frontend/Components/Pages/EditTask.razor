@@ -1,0 +1,13 @@
+﻿@page "/edittask"
+@using Models
+
+<PageTitle>New Task</PageTitle>
+<h3>EditTask</h3>
+
+@code {
+    private TaskDetails task {get; set;} = new()
+    {
+        Title = string.Empty,
+        Description = string.Empty
+    };
+}
