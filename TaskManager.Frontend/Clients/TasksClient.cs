@@ -1,4 +1,5 @@
-﻿using TaskManager.Frontend.Models;
+﻿using System.Collections.Immutable;
+using TaskManager.Frontend.Models;
 
 namespace TaskManager.Frontend.Clients;
 
@@ -27,4 +28,16 @@ public class TasksClient
     ];
 
     public TaskSummary[] GetTasks() => tasks.ToArray();
+
+    public void AddTask(TaskDetails task)
+    {
+        var taskSummary = new TaskSummary
+        {
+            Id = tasks.Count + 1,
+            Title = task.Title,
+            Description = task.Description
+        };
+
+        tasks.Add(taskSummary);
+    }
 }
