@@ -1,9 +1,11 @@
+using TaskManager.Frontend.Clients;
 using TaskManager.Frontend.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents();
+builder.Services.AddSingleton<TasksClient>();
 
 var app = builder.Build();
 

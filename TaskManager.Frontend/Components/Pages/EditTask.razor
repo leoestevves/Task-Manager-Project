@@ -1,5 +1,6 @@
 ﻿@page "/edittask"
 @inject NavigationManager NavigationManager
+@inject TasksClient TasksClient
 
 <PageTitle>New Task</PageTitle>
 <h3>New Task</h3>
@@ -31,11 +32,9 @@
         Description = string.Empty
     };
 
-    private TasksClient tasksClient = new();
-
     private void HandleSubmit()
     {
-        tasksClient.AddTask(task);
+        TasksClient.AddTask(task);
         NavigationManager.NavigateTo("/"); //volta para a pagina inicial
     }
 }
