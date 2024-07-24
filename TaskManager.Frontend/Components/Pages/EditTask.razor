@@ -1,4 +1,5 @@
 ﻿@page "/edittask"
+@inject NavigationManager NavigationManager
 
 <PageTitle>New Task</PageTitle>
 <h3>New Task</h3>
@@ -15,6 +16,7 @@
                 <InputText id="description" @bind-Value="task.Description" class="form-control"/>
             </div>
             <button type="submit" class="btn btn-primary">Save</button>
+            <a role="button" class="btn btn-secondary" href="/">Cancel</a>
         </EditForm>
     </div>
 </div>
@@ -34,5 +36,6 @@
     private void HandleSubmit()
     {
         tasksClient.AddTask(task);
+        NavigationManager.NavigateTo("/"); //volta para a pagina inicial
     }
 }
