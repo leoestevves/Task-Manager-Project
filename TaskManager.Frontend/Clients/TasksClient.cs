@@ -40,4 +40,17 @@ public class TasksClient
 
         tasks.Add(taskSummary);
     }
+
+    public TaskDetails GetTask(int id)
+    {
+        TaskSummary? task = tasks.Find(task => task.Id == id);
+        ArgumentNullException.ThrowIfNull(task);
+
+        return new TaskDetails
+        {
+            Id = task.Id,
+            Title = task.Title,
+            Description = task.Description
+        };        
+    }
 }
