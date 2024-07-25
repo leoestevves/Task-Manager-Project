@@ -43,14 +43,28 @@ public class TasksClient
 
     public TaskDetails GetTask(int id)
     {
-        TaskSummary? task = tasks.Find(task => task.Id == id);
-        ArgumentNullException.ThrowIfNull(task);
+        TaskSummary task = GetTaskSummaryById(id);
 
         return new TaskDetails
         {
             Id = task.Id,
             Title = task.Title,
             Description = task.Description
-        };        
+        };
+    }
+
+    public void UpdateTask(TaskDetails updatedTask)
+    {
+        TaskSummary existingTask = GetTaskSummaryById(updatedTask.Id);
+
+        existingTask.Title = updatedTask.Title;
+        existingTask.Description = updatedTask.Description;
+    }
+
+    private TaskSummary GetTaskSummaryById(int id)
+    {
+        TaskSummary? task = tasks.Find(task => task.Id == id);
+        ArgumentNullException.ThrowIfNull(task);
+        return task;
     }
 }

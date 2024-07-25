@@ -1,44 +1,87 @@
 ﻿@page "/edittask"
+@page "/edittask/{id:int}"
+
 @inject NavigationManager NavigationManager
 @inject TasksClient TasksClient
 
-<PageTitle>New Task</PageTitle>
-<h3>New Task</h3>
+<PageTitle>@titleHead</PageTitle>
+<h3>@titleHead</h3>
 
-<div class="row">
-    <div class="col-md-5">
-        <EditForm Model="@task" FormName="editTask" OnValidSubmit="HandleSubmit">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-            <div class="mb-3">
-                <label for="title" class="form-label">Title:</label>
-                <InputText id="title" @bind-Value="task.Title" class="form-control"/>
-                <ValidationMessage For="() => task.Title" />
-            </div>
-            <div class="mb-3">
-                <label for="description" class="form-label">Description:</label>
-                <InputText id="description" @bind-Value="task.Description" class="form-control"/>
-                <ValidationMessage For="() => task.Description" />
-            </div>
-            <button type="submit" class="btn btn-primary">Save</button>
-            <a role="button" class="btn btn-secondary" href="/">Cancel</a>
-        </EditForm>
+@if (task is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-5">
+            <EditForm Model="@task" FormName="editTask" OnValidSubmit="HandleSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title:</label>
+                    <InputText id="title" @bind-Value="task.Title" class="form-control"/>
+                    <ValidationMessage For="() => task.Title" />
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description:</label>
+                    <InputText id="description" @bind-Value="task.Description" class="form-control"/>
+                    <ValidationMessage For="() => task.Description" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a role="button" class="btn btn-secondary" href="/">Cancel</a>
+            </EditForm>
+        </div>
     </div>
-</div>
-
+}
 
 @code 
 {
+    [Parameter]
+    public int? Id {get; set;}
+
     [SupplyParameterFromForm]
-    private TaskDetails task {get; set;} = new()
+    private TaskDetails? task {get; set;}
+
+    private string titleHead = string.Empty;
+
+    protected override void OnParametersSet()
     {
-        Title = string.Empty,
-        Description = string.Empty
-    };
+        if (task is not null) //com isso a "task" nao e destruida apos o handleSubmit, pois esse metodo e invocado duas vezes, quando carrega a pagina e apos o handlesubmit
+        {
+            return;
+        }
+
+        if (Id is not null)
+        {
+            task = TasksClient.GetTask(Id.Value);
+            titleHead = $"Edit {task.Title}";
+        }
+        else 
+        {
+            task = new()
+            {
+                Title = string.Empty,
+                Description = string.Empty
+            };
+            titleHead = "New Task"; 
+        }
+    }
 
     private void HandleSubmit()
     {
-        TasksClient.AddTask(task);
+        ArgumentNullException.ThrowIfNull(task);
+
+        if (Id is null)
+        {
+            TasksClient.AddTask(task);
+        }
+        else
+        {
+            task.Id = Id.Value;
+            TasksClient.UpdateTask(task);
+        }
+
         NavigationManager.NavigateTo("/"); //volta para a pagina inicial
     }
 }
