@@ -3,7 +3,7 @@ using TaskManager.Frontend.Models;
 
 namespace TaskManager.Frontend.Clients;
 
-public class TasksClient
+public class TasksClient(HttpClient httpClient)
 {
     private readonly List<TaskSummary> tasks = 
     [

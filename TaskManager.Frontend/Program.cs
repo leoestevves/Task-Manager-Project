@@ -7,7 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
-builder.Services.AddSingleton<TasksClient>();
+var taskManagerApiUrl = "http://localhost:5145";
+
+builder.Services.AddHttpClient<TasksClient>(client => client.BaseAddress = new Uri(taskManagerApiUrl));
 
 var app = builder.Build();
 
