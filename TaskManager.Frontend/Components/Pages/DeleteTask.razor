@@ -1,0 +1,41 @@
+﻿@inject TasksClient Client
+@inject NavigationManager NavigationManager
+
+<div class="modal fade" id="@GetModalId(Task)" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">@titleHead</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>      
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="@Confirm">Delete</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public TaskSummary? Task {get; set;}
+
+    private string titleHead = string.Empty;
+
+    protected override void OnParametersSet()
+    {
+        titleHead = $"Delete {Task?.Title}?";
+    }
+
+    public static string GetModalId(TaskSummary? task)
+    {
+        ArgumentNullException.ThrowIfNull(task);
+        return $"deleteModal-{task.Id}";
+    }
+
+    private void Confirm()
+    {
+        Client.DeleteTask(Task!.Id);
+        NavigationManager.Refresh(); //Depois de deletar uma task, recarrega para mostrar que mudou
+    }
+}

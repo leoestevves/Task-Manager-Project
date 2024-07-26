@@ -61,6 +61,12 @@ public class TasksClient
         existingTask.Description = updatedTask.Description;
     }
 
+    public void DeleteTask(int id)
+    {
+        var task = GetTaskSummaryById(id);
+        tasks.Remove(task);
+    }
+
     private TaskSummary GetTaskSummaryById(int id)
     {
         TaskSummary? task = tasks.Find(task => task.Id == id);
