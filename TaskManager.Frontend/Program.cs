@@ -7,7 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
-var taskManagerApiUrl = "http://localhost:5145";
+var taskManagerApiUrl = builder.Configuration["TaskManagerApiUrl"] ?? 
+    throw new Exception("TaskManagerApiUrl is not set"); //Se for nulo, retorna um erro
 
 builder.Services.AddHttpClient<TasksClient>(client => client.BaseAddress = new Uri(taskManagerApiUrl));
 
