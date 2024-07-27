@@ -4,73 +4,22 @@ using TaskManager.Frontend.Models;
 namespace TaskManager.Frontend.Clients;
 
 public class TasksClient(HttpClient httpClient)
-{
-    private readonly List<TaskSummary> tasks = 
-    [
-        new ()
-        {
-            Id = 1,
-            Title = "Limpar a casa",
-            Description = "Aproveitar o final de semana para limpar a casa inteira."
-        },
-        new ()
-        {
-            Id = 2,
-            Title = "Ir ao mercado",
-            Description = "Fazer compras pela manhã no mercado mais próximo."
-        },
-        new ()
-        {
-            Id = 3,
-            Title = "Finalizar projeto pessoal.",
-            Description = "Terminar o projeto de games nesse final de semana."
-        }
-    ];
+{   
+    
+    public async Task<TaskSummary[]> GetTasksAsync() 
+        => await httpClient.GetFromJsonAsync<TaskSummary[]>("tasks") ?? []; //Caso tasks seja nulo, ele retorna um vetor vazio
 
-    public TaskSummary[] GetTasks() => tasks.ToArray();
+    public async Task AddTaskAsync(TaskDetails task)
+        => await httpClient.PostAsJsonAsync("tasks", task); //"tasks" e a rota do backend
 
-    public void AddTask(TaskDetails task)
-    {
-        var taskSummary = new TaskSummary
-        {
-            Id = tasks.Count + 1,
-            Title = task.Title,
-            Description = task.Description
-        };
+    public async Task<TaskDetails> GetTaskAsync(int id)
+        => await httpClient.GetFromJsonAsync<TaskDetails>($"tasks/{id}")
+            ?? throw new Exception("Could not find task!");
 
-        tasks.Add(taskSummary);
-    }
-
-    public TaskDetails GetTask(int id)
-    {
-        TaskSummary task = GetTaskSummaryById(id);
-
-        return new TaskDetails
-        {
-            Id = task.Id,
-            Title = task.Title,
-            Description = task.Description
-        };
-    }
-
-    public void UpdateTask(TaskDetails updatedTask)
-    {
-        TaskSummary existingTask = GetTaskSummaryById(updatedTask.Id);
-
-        existingTask.Title = updatedTask.Title;
-        existingTask.Description = updatedTask.Description;
-    }
-
-    public void DeleteTask(int id)
-    {
-        var task = GetTaskSummaryById(id);
-        tasks.Remove(task);
-    }
-
-    private TaskSummary GetTaskSummaryById(int id)
-    {
-        TaskSummary? task = tasks.Find(task => task.Id == id);
-        ArgumentNullException.ThrowIfNull(task);
-        return task;
-    }
+    public async Task UpdateTaskAsync(TaskDetails updatedTask)
+        => await httpClient.PutAsJsonAsync($"tasks/{updatedTask.Id}", updatedTask);       
+    
+    public async Task DeleteTaskAsync(int id)
+        => await httpClient.DeleteAsync($"tasks/{id}");
+    
 }

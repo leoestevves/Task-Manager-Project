@@ -49,9 +49,9 @@ else
 {
     private TaskSummary[]? tasks;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        tasks = Client.GetTasks();
+        tasks = await Client.GetTasksAsync();
     }
 
     private static string TaskUrl(int id)
