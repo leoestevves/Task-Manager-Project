@@ -11,7 +11,7 @@
         </div>      
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="@Confirm">Delete</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="@ConfirmAsync">Delete</button>
         </div>
         </div>
     </div>
@@ -34,9 +34,9 @@
         return $"deleteModal-{task.Id}";
     }
 
-    private void Confirm()
+    private async Task ConfirmAsync()
     {
-        Client.DeleteTask(Task!.Id);
+        await Client.DeleteTaskAsync(Task!.Id);
         NavigationManager.Refresh(); //Depois de deletar uma task, recarrega para mostrar que mudou
     }
 }

@@ -17,7 +17,7 @@ else
 {
     <div class="row">
         <div class="col-md-5">
-            <EditForm Model="@task" FormName="editTask" OnValidSubmit="HandleSubmit">
+            <EditForm Model="@task" FormName="editTask" OnValidSubmit="HandleSubmitAsync">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
                 <div class="mb-3">
@@ -47,7 +47,7 @@ else
 
     private string titleHead = string.Empty;
 
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
         if (task is not null) //com isso a "task" nao e destruida apos o handleSubmit, pois esse metodo e invocado duas vezes, quando carrega a pagina e apos o handlesubmit
         {
@@ -56,7 +56,7 @@ else
 
         if (Id is not null)
         {
-            task = TasksClient.GetTask(Id.Value);
+            task = await TasksClient.GetTaskAsync(Id.Value);
             titleHead = $"Edit {task.Title}";
         }
         else 
@@ -70,18 +70,18 @@ else
         }
     }
 
-    private void HandleSubmit()
+    private async Task HandleSubmitAsync()
     {
         ArgumentNullException.ThrowIfNull(task);
 
         if (Id is null)
         {
-            TasksClient.AddTask(task);
+            await TasksClient.AddTaskAsync(task);
         }
         else
         {
             task.Id = Id.Value;
-            TasksClient.UpdateTask(task);
+            await TasksClient.UpdateTaskAsync(task);
         }
 
         NavigationManager.NavigateTo("/"); //volta para a pagina inicial
