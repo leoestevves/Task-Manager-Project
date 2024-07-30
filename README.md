@@ -12,9 +12,12 @@ Esse projeto utilizou o curso gratuito do [Julio Casal](https://www.youtube.com/
 ## Aplicação
 O projeto "Task Manager" é basicamente um CRUD, onde o usuário pode fazer o cadastro de uma tarefa, utilizando um título e uma descrição, guardando as tarefas em um banco de dados. Foi feita a parte de backend e de frontend, sendo C# a principal linguagem de programação utilizada.
 
+A parte de backend se resume a uma API, que é responsável por enviar todas as informações necessárias para o frontend. Nessa parte do projeto foi utilizado o Entity Framework.
+
 Página inicial: ![](ReadmeFiles/Print%20pagina%20inicial.png)
 
-Criando task: ![](ReadmeFiles/Print%20criando%20task.png)
+Criando task:
+![](ReadmeFiles/Print%20criando%20task.png)
 
 ## Conclusão
 Consegui aprender muito nesse projeto, foi minha primeira vez utilizando Blazor, além disso fazia muito tempo que não utilizava bootstrap.
